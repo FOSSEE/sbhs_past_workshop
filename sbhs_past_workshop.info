@@ -1,0 +1,3 @@
+name = sbhs_past_workshop
+description = To manage and display testimonials
+core = 6.x
