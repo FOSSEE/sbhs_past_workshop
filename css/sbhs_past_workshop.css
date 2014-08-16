@@ -1,0 +1,6 @@
+table.workshop-details tr {
+    border-bottom: 1px solid #cccccc;
+}
+table.workshop-details td {
+    vertical-align: top;
+}

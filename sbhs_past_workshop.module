@@ -261,7 +261,7 @@ function sbhs_past_workshop_view_details_all($workshop_id=0) {
         ORDER BY date desc";
     $result = db_query($query);
     $row=db_fetch_object($result);	
-    $page_content .="<table >";
+    $page_content .="<table class='workshop-details'>";
     $page_content .="<tr><td><b>Institute</b></td><td>{$row->institute}</td></tr>";
     $page_content .="<tr><td><b>Workshop Date</b></td><td>{$row->date}</td></tr>";
     $page_content .="<tr><td><b>Workshop Time</b></td><td>{$row->time}</td></tr>";
@@ -287,6 +287,7 @@ function sbhs_past_workshop_view_upcoming_all() {
 }
 
 function sbhs_past_workshop_init() {
+    drupal_add_css(drupal_get_path("module", "sbhs_past_workshop") . "/css/sbhs_past_workshop.css");
     drupal_add_js(drupal_get_path("module", "sbhs_past_workshop") . "/js/confirm.js");
 }
 
