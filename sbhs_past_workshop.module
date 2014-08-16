@@ -3,7 +3,7 @@ function sbhs_past_workshop_menu() {
     $items = array();
     $items["workshops"] = array(
         "title" => "Past Workshops",
-        "page callback" => "sbhs_past_workshop_display_all",
+        "page callback" => "sbhs_past_workshop_view_all",
         "access arguments" => array("view past workshop"),
         "type" => MENU_CALLBACK
     );
@@ -25,19 +25,13 @@ function sbhs_past_workshop_menu() {
         "access arguments" => array("manage past workshop"),
         "type" => MENU_CALLBACK
     );
-    $items["user_view"] = array(
-        "title" => "View Past Workshops",
-        "page callback" => "sbhs_past_workshop_view_all",
-        "access arguments" => array("view past workshop"),
-        "type" => MENU_CALLBACK
-    );
-    $items["user_view/view_details"] = array(
-        "title" => "View Past Workshops Details",
+    $items["workshops/view_details"] = array(
+        "title" => "Past Workshops Details",
         "page callback" => "sbhs_past_workshop_view_details_all",
         "access arguments" => array("view past workshop"),
         "type" => MENU_CALLBACK
     );
-    $items["upcoming_workshops"] = array(
+    $items["workshops/upcoming"] = array(
         "title" => "View Upcoming Workshops",
         "page callback" => "sbhs_past_workshop_view_upcoming_all",
         "access arguments" => array("view upcoming workshop"),
@@ -149,8 +143,6 @@ function sbhs_past_workshop_display_all()
 
 }
 
-
-
 function sbhs_past_workshop_add_form_submit($form, &$form_state) {
     $v = $form_state["values"];
     if($v["workshop_id"]) {
@@ -189,8 +181,7 @@ function sbhs_past_workshop_add_form_submit($form, &$form_state) {
 
 
 
-function sbhs_past_workshop_delete_all($workshop_id=0)
-{
+function sbhs_past_workshop_delete_all($workshop_id=0) {
     $page_content = "";
     $query = "DELETE from sbhs_workshop 
         WHERE w_id = {$workshop_id}";
@@ -206,7 +197,7 @@ function sbhs_past_workshop_delete_all($workshop_id=0)
 
 function sbhs_past_workshop_edit_all($workshop_id=0) {
     $page_content = "";
-    if($workshop_id){
+    if($workshop_id) {
         $page_content .= drupal_get_form("sbhs_past_workshop_add_form", $workshop_id);
     } else {
         $query = "
@@ -253,7 +244,7 @@ function sbhs_past_workshop_view_all($workshop_id=0) {
             $row->institute,		   
             $row->city,
             $row->no_of_students,
-            l("view", "user_view/view_details/{$row->w_id}")
+            l("view", "workshops/view_details/{$row->w_id}")
 
         );
         array_push($rows, $item);
@@ -288,8 +279,7 @@ function sbhs_past_workshop_view_details_all($workshop_id=0) {
 
 }
 
-function sbhs_past_workshop_view_upcoming_all()
-{
+function sbhs_past_workshop_view_upcoming_all() {
     $page_content = ""; 
     $page_content .= "<br/><h5>There are no upcoming workshops for now. Keep checking for updates</h5>";
     return $page_content;
