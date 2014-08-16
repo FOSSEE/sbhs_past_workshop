@@ -1,309 +1,303 @@
-
 <?php 
-    function sbhs_past_workshop_menu() {
-        $items = array();
-        $items["workshops"] = array(
-            "title" => "Past Workshops",
-            "page callback" => "sbhs_past_workshop_display_all",
-            "access arguments" => array("view past workshop"),
-            "type" => MENU_CALLBACK
-        );
-	 $items["workshops/add"] = array(
-            "title" => "Add Past Workshops",
-            "page callback" => "sbhs_past_workshop_add_all",
-            "access arguments" => array("manage past workshop"),
-            "type" => MENU_CALLBACK
-        );
-        $items["workshops/edit"] = array(
-            "title" => "Edit Past Workshops",
-            "page callback" => "sbhs_past_workshop_edit_all",
-            "access arguments" => array("manage past workshop"),
-            "type" => MENU_CALLBACK
-        );
-        $items["workshops/delete"] = array(
-            "title" => "Delete Past Workshops",
-            "page callback" => "sbhs_past_workshop_delete_all",
-            "access arguments" => array("manage past workshop"),
-            "type" => MENU_CALLBACK
-        );
-	
-	   $items["user_view"] = array(
-            "title" => "View Past Workshops",
-            "page callback" => "sbhs_past_workshop_view_all",
-            "access arguments" => array("view past workshop"),
-            "type" => MENU_CALLBACK
-        );
-	
-	$items["user_view/view_details"] = array(
-            "title" => "View Past Workshops Details",
-            "page callback" => "sbhs_past_workshop_view_details_all",
-            "access arguments" => array("view past workshop"),
-            "type" => MENU_CALLBACK
-        );
-	
-	$items["upcoming_workshops"] = array(
-            "title" => "View Upcoming Workshops",
-            "page callback" => "sbhs_past_workshop_view_upcoming_all",
-            "access arguments" => array("view upcoming workshop"),
-            "type" => MENU_CALLBACK
-        );
-      	
-        return $items;
-    }
+function sbhs_past_workshop_menu() {
+    $items = array();
+    $items["workshops"] = array(
+        "title" => "Past Workshops",
+        "page callback" => "sbhs_past_workshop_display_all",
+        "access arguments" => array("view past workshop"),
+        "type" => MENU_CALLBACK
+    );
+    $items["workshops/add"] = array(
+        "title" => "Add Past Workshops",
+        "page callback" => "sbhs_past_workshop_add_all",
+        "access arguments" => array("manage past workshop"),
+        "type" => MENU_CALLBACK
+    );
+    $items["workshops/edit"] = array(
+        "title" => "Edit Past Workshops",
+        "page callback" => "sbhs_past_workshop_edit_all",
+        "access arguments" => array("manage past workshop"),
+        "type" => MENU_CALLBACK
+    );
+    $items["workshops/delete"] = array(
+        "title" => "Delete Past Workshops",
+        "page callback" => "sbhs_past_workshop_delete_all",
+        "access arguments" => array("manage past workshop"),
+        "type" => MENU_CALLBACK
+    );
+    $items["user_view"] = array(
+        "title" => "View Past Workshops",
+        "page callback" => "sbhs_past_workshop_view_all",
+        "access arguments" => array("view past workshop"),
+        "type" => MENU_CALLBACK
+    );
+    $items["user_view/view_details"] = array(
+        "title" => "View Past Workshops Details",
+        "page callback" => "sbhs_past_workshop_view_details_all",
+        "access arguments" => array("view past workshop"),
+        "type" => MENU_CALLBACK
+    );
+    $items["upcoming_workshops"] = array(
+        "title" => "View Upcoming Workshops",
+        "page callback" => "sbhs_past_workshop_view_upcoming_all",
+        "access arguments" => array("view upcoming workshop"),
+        "type" => MENU_CALLBACK
+    );
 
-	function sbhs_past_workshop_perm() {
-        return array(
-            "view past workshop",
-            "manage past workshop",
-        );
-    }
+    return $items;
+}
 
-	function sbhs_past_workshop_add_form($form_state, $workshop_id=0) {
-        $query = "
-            SELECT * FROM sbhs_workshop
-            WHERE w_id = {$workshop_id}
+function sbhs_past_workshop_perm() {
+    return array(
+        "view past workshop",
+        "manage past workshop",
+    );
+}
+
+function sbhs_past_workshop_add_form($form_state, $workshop_id=0) {
+    $query = "
+        SELECT * FROM sbhs_workshop
+        WHERE w_id = {$workshop_id}
         ";
-        $result = db_query($query);
-        $row = db_fetch_object($result);
+    $result = db_query($query);
+    $row = db_fetch_object($result);
 
-        $form = array();
-	$form["organiser"] = array(
-            "#type" => "textfield",
-            "#title" => "Organiser",
-            "#default_value" => $row->organiser,
-            "#required" => TRUE
-        );
-	 $form["date"] = array(
-            "#type" => "textfield",
-            "#title" => "Date",
-            "#default_value" => $row->date,
-            "#required" => TRUE
-        );
-	 $form["time"] = array(
-            "#type" => "textfield",
-            "#title" => "Time",
-            "#default_value" => $row->time,
-            "#required" => TRUE
-        );
-	 $form["institute"] = array(
-            "#type" => "textfield",
-            "#title" => "Institute",
-            "#default_value" => $row->institute,
-            "#required" => TRUE
-        );
-       
-	 $form["street"] = array(
-            "#type" => "textfield",
-            "#title" => "Street",
-            "#default_value" => $row->street,
-            "#required" => TRUE
-        );
-	 $form["city"] = array(
-            "#type" => "textfield",
-            "#title" => "City",
-            "#default_value" => $row->city,
-            "#required" => TRUE
-        );
-	 $form["state"] = array(
-            "#type" => "textfield",
-            "#title" => "State",
-            "#default_value" => $row->state,
-            "#required" => TRUE
-        );
-	 $form["pincode"] = array(
-            "#type" => "textfield",
-            "#title" => "Pincode",
-            "#default_value" => $row->pincode,
-            "#required" => TRUE
-        );
-	 $form["no_of_students"] = array(
-            "#type" => "textfield",
-            "#title" => "Number Of Students",
-            "#default_value" => $row->no_of_students,
-            "#required" => TRUE
-        );
-            $form["body"] = array(
-            "#type" => "textarea",
-            "#title" => "Description",
-            "#default_value" => $row->body,
-            "#required" => TRUE
-        );
-           
-        $form["workshop_id"] = array(
-            "#type" => "hidden",
-            "#value" => $workshop_id
-        );
-        $form["submit"] = array(
-            "#type" => "submit",
-            "#value" => "Submit"
-        );
-        return $form;
-    }
+    $form = array();
+    $form["organiser"] = array(
+        "#type" => "textfield",
+        "#title" => "Organiser",
+        "#default_value" => $row->organiser,
+        "#required" => TRUE
+    );
+    $form["date"] = array(
+        "#type" => "textfield",
+        "#title" => "Date",
+        "#default_value" => $row->date,
+        "#required" => TRUE
+    );
+    $form["time"] = array(
+        "#type" => "textfield",
+        "#title" => "Time",
+        "#default_value" => $row->time,
+        "#required" => TRUE
+    );
+    $form["institute"] = array(
+        "#type" => "textfield",
+        "#title" => "Institute",
+        "#default_value" => $row->institute,
+        "#required" => TRUE
+    );
 
+    $form["street"] = array(
+        "#type" => "textfield",
+        "#title" => "Street",
+        "#default_value" => $row->street,
+        "#required" => TRUE
+    );
+    $form["city"] = array(
+        "#type" => "textfield",
+        "#title" => "City",
+        "#default_value" => $row->city,
+        "#required" => TRUE
+    );
+    $form["state"] = array(
+        "#type" => "textfield",
+        "#title" => "State",
+        "#default_value" => $row->state,
+        "#required" => TRUE
+    );
+    $form["pincode"] = array(
+        "#type" => "textfield",
+        "#title" => "Pincode",
+        "#default_value" => $row->pincode,
+        "#required" => TRUE
+    );
+    $form["no_of_students"] = array(
+        "#type" => "textfield",
+        "#title" => "Number Of Students",
+        "#default_value" => $row->no_of_students,
+        "#required" => TRUE
+    );
+    $form["body"] = array(
+        "#type" => "textarea",
+        "#title" => "Description",
+        "#default_value" => $row->body,
+        "#required" => TRUE
+    );
 
- 	function sbhs_past_workshop_add_form_validate($form,&$form_state) {
-        // for future use
-    }
-
- 	function sbhs_past_workshop_display_all() 
-	{
-        $page_content = "";
-	$page_content .= drupal_get_form("sbhs_past_workshop_add_form");
-	
-        return $page_content;
-	
-    	}
+    $form["workshop_id"] = array(
+        "#type" => "hidden",
+        "#value" => $workshop_id
+    );
+    $form["submit"] = array(
+        "#type" => "submit",
+        "#value" => "Submit"
+    );
+    return $form;
+}
 
 
+function sbhs_past_workshop_add_form_validate($form,&$form_state) {
+    // for future use
+}
 
-	 function sbhs_past_workshop_add_form_submit($form, &$form_state) {
-       	 $v = $form_state["values"];
-	 if($v["workshop_id"]) {
-            $query = "
-                UPDATE sbhs_workshop SET
-                organiser = '%s', date = '%s', time = '%s',
-                institute = '%s', street = '%s', city = '%s',
-		state = '%s',pincode = %d,no_of_students = %d,body = '%s'
-                WHERE w_id = %d
+function sbhs_past_workshop_display_all() 
+{
+    $page_content = "";
+    $page_content .= drupal_get_form("sbhs_past_workshop_add_form");
+    return $page_content;
+
+}
+
+
+
+function sbhs_past_workshop_add_form_submit($form, &$form_state) {
+    $v = $form_state["values"];
+    if($v["workshop_id"]) {
+        $query = "
+            UPDATE sbhs_workshop SET
+            organiser = '%s', date = '%s', time = '%s',
+            institute = '%s', street = '%s', city = '%s',
+            state = '%s',pincode = %d,no_of_students = %d,body = '%s'
+            WHERE w_id = %d
             ";
-           $result = db_query($query, 
-                $v["organiser"], $v["date"], $v["time"],
-                $v["institute"], $v["street"], $v["city"],
-		 $v["state"], $v["pincode"], $v["no_of_students"],$v["body"],$v["workshop_id"]
+        $result = db_query($query, 
+            $v["organiser"], $v["date"], $v["time"],
+            $v["institute"], $v["street"], $v["city"],
+            $v["state"], $v["pincode"], $v["no_of_students"],$v["body"],$v["workshop_id"]
+        );
+
+    } else {
+        $query = "
+            INSERT INTO sbhs_workshop
+            (organiser, date, time, institute, street, city,state,pincode,no_of_students,body)
+            VALUES
+            ('%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, %d, '%s')
+            ";
+        $result = db_query($query, 
+            $v["organiser"], $v["date"], $v["time"],
+            $v["institute"], $v["street"], $v["city"],
+            $v["state"], $v["pincode"], $v["no_of_students"],$v["body"]
+        );
+    }
+    if(!$result) {
+        drupal_set_message("Something went wrong, please try again.", "error");
+    } else {
+        drupal_set_message("Workshop added successfully","status");
+    }
+}
+
+
+
+function sbhs_past_workshop_delete_all($workshop_id=0)
+{
+    $page_content = "";
+    $query = "DELETE from sbhs_workshop 
+        WHERE w_id = {$workshop_id}";
+    $result = db_query($query,$workshop_id);
+    if(!$result) {
+        drupal_set_message("Something went wrong, please try again.", "error");
+    } else {
+        drupal_set_message("Workshop Deleted successfully","status");
+    }
+    return $page_content;
+}
+
+
+function sbhs_past_workshop_edit_all($workshop_id=0) {
+    $page_content = "";
+    if($workshop_id){
+        $page_content .= drupal_get_form("sbhs_past_workshop_add_form", $workshop_id);
+    } else {
+        $query = "
+            SELECT * FROM sbhs_workshop 
+            ORDER BY date desc";
+        $result = db_query($query);
+        $headers = array(
+            "Date","Institute", "City","No of Students","Action"
+        );
+        $rows = array();
+        $options = array('attributes' => array('class' => 'delete'));
+        while($row = db_fetch_object($result)) {
+            $item = array(
+                $row->date,
+                $row->institute,		   
+                $row->city,
+                $row->no_of_students,
+                l("Edit", "workshops/edit/{$row->w_id}") ." | ".
+                l("Delete","workshops/delete/{$row->w_id}",$options)
+
             );
-        
-        } else {
-            $query = "
-                INSERT INTO sbhs_workshop
-                (organiser, date, time, institute, street, city,state,pincode,no_of_students,body)
-                VALUES
-                ('%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, %d, '%s')
-                ";
-            $result = db_query($query, 
-                $v["organiser"], $v["date"], $v["time"],
-                $v["institute"], $v["street"], $v["city"],
-		 $v["state"], $v["pincode"], $v["no_of_students"],$v["body"]
-            );
+            array_push($rows, $item);
         }
-        if(!$result) {
-            drupal_set_message("Something went wrong, please try again.", "error");
-        } else {
-            drupal_set_message("Workshop added successfully","status");
-        }
+        $page_content .= theme("table", $headers, $rows);
     }
+    return $page_content;
+}
 
+function sbhs_past_workshop_view_all($workshop_id=0) {
 
+    $page_content = "";      
+    $query = "
+        SELECT * FROM sbhs_workshop 
+        ORDER BY date desc";
+    $result = db_query($query);
+    $headers = array(
+        "Date","Institute", "City","No of Students","Action"
+    );
+    $rows = array();
+    $options = array('attributes' => array('class' => 'delete'));
+    while($row = db_fetch_object($result)) {
+        $item = array(
+            $row->date,
+            $row->institute,		   
+            $row->city,
+            $row->no_of_students,
+            l("view", "user_view/view_details/{$row->w_id}")
 
-	function sbhs_past_workshop_delete_all($workshop_id=0)
-        {
-	$page_content = "";
-	$query = "DELETE from sbhs_workshop 
-		WHERE w_id = {$workshop_id}";
-		$result = db_query($query,$workshop_id);
-		 if(!$result) {
-            drupal_set_message("Something went wrong, please try again.", "error");
-        } else {
-            drupal_set_message("Workshop Deleted successfully","status");
-        }
-       	 return $page_content;
+        );
+        array_push($rows, $item);
     }
+    $page_content .= theme("table", $headers, $rows);
+
+    return $page_content;
+}
+
+function sbhs_past_workshop_view_details_all($workshop_id=0) {
+    $page_content = "";      
+    $query = "
+        SELECT * FROM sbhs_workshop 
+        ORDER BY date desc";
+    $result = db_query($query);
+    $row=db_fetch_object($result);	
+    $page_content .="<table >";
+    $page_content .="<tr><td><b>Institute</b></td><td>{$row->institute}</td></tr>";
+    $page_content .="<tr><td><b>Workshop Date</b></td><td>{$row->date}</td></tr>";
+    $page_content .="<tr><td><b>Workshop Time</b></td><td>{$row->time}</td></tr>";
+    $page_content .="<tr><td><b>No. of Participants</b></td><td>{$row->no_of_students}</td></tr>";
+    $page_content .="<tr><td><b>Organiser</b></td><td>{$row->organiser}</td></tr>";
+    $page_content .="<tr><td><b>Street</b></td><td>{$row->street}</td></tr>";
+    $page_content .="<tr><td><b>City</b></td><td>{$row->city}</td></tr>";
+    $page_content .="<tr><td><b>State</b></td><td>{$row->state}</td></tr>";
+    $page_content .="<tr><td><b>Pincode</b></td><td>{$row->pincode}</td></tr>";
+    $page_content .="<tr><td><b>Description</b></td><td>{$row->body}</td></tr>";
+    $page_content .="</table>";
 
 
-	 function sbhs_past_workshop_edit_all($workshop_id=0) {
-         $page_content = "";
- 	if($workshop_id){
-            $page_content .= drupal_get_form("sbhs_past_workshop_add_form", $workshop_id);
-        } else {
-        	$query = "
-                SELECT * FROM sbhs_workshop 
-		ORDER BY date desc";
-            $result = db_query($query);
-            $headers = array(
-                "Date","Institute", "City","No of Students","Action"
-            );
-            $rows = array();
-	    $options = array('attributes' => array('class' => 'delete'));
-            while($row = db_fetch_object($result)) {
-                $item = array(
-		    $row->date,
-                    $row->institute,		   
-                    $row->city,
-		    $row->no_of_students,
-                    l("Edit", "workshops/edit/{$row->w_id}") ." | ".
-                    l("Delete","workshops/delete/{$row->w_id}",$options)
-	
-                );
-                array_push($rows, $item);
-            }
-            $page_content .= theme("table", $headers, $rows);
-        }
-        return $page_content;
-    }
+    return $page_content;
 
-	function sbhs_past_workshop_view_all($workshop_id=0) {
+}
 
-	 $page_content = "";      
-        	$query = "
-                SELECT * FROM sbhs_workshop 
-		ORDER BY date desc";
-            $result = db_query($query);
-            $headers = array(
-                "Date","Institute", "City","No of Students","Action"
-            );
-            $rows = array();
-	    $options = array('attributes' => array('class' => 'delete'));
-            while($row = db_fetch_object($result)) {
-                $item = array(
-		    $row->date,
-                    $row->institute,		   
-                    $row->city,
-		    $row->no_of_students,
-                    l("view", "user_view/view_details/{$row->w_id}")
-                    
-                );
-                array_push($rows, $item);
-            }
-            $page_content .= theme("table", $headers, $rows);
-        
-        return $page_content;
-    }
+function sbhs_past_workshop_view_upcoming_all()
+{
+    $page_content = ""; 
+    $page_content .= "<br/><h5>There are no upcoming workshops for now. Keep checking for updates</h5>";
+    return $page_content;
 
-	function sbhs_past_workshop_view_details_all($workshop_id=0) {
-	$page_content = "";      
-        	$query = "
-                SELECT * FROM sbhs_workshop 
-		ORDER BY date desc";
-                $result = db_query($query);
-		$row=db_fetch_object($result);	
-		$page_content .="<table >";
-           	$page_content .="<tr><td><b>Institute</b></td><td>{$row->institute}</td></tr>";
-		$page_content .="<tr><td><b>Workshop Date</b></td><td>{$row->date}</td></tr>";
-        	$page_content .="<tr><td><b>Workshop Time</b></td><td>{$row->time}</td></tr>";
-		$page_content .="<tr><td><b>No. of Participants</b></td><td>{$row->no_of_students}</td></tr>";
-		$page_content .="<tr><td><b>Organiser</b></td><td>{$row->organiser}</td></tr>";
-		$page_content .="<tr><td><b>Street</b></td><td>{$row->street}</td></tr>";
-		$page_content .="<tr><td><b>City</b></td><td>{$row->city}</td></tr>";
- 		$page_content .="<tr><td><b>State</b></td><td>{$row->state}</td></tr>";
-		$page_content .="<tr><td><b>Pincode</b></td><td>{$row->pincode}</td></tr>";
-         	$page_content .="<tr><td><b>Description</b></td><td>{$row->body}</td></tr>";
-		$page_content .="</table>";
+}
 
-		
-        return $page_content;
-
-    }
-
-	function sbhs_past_workshop_view_upcoming_all()
-	{
-		$page_content = ""; 
-		$page_content .= "<br/><h5>There are no upcoming workshops for now. Keep checking for updates</h5>";
-		 return $page_content;
-	
-	}
-
-    function sbhs_past_workshop_init() {
-       drupal_add_js(drupal_get_path("module", "sbhs_past_workshop") . "/js/confirm.js");
-    }
-
+function sbhs_past_workshop_init() {
+    drupal_add_js(drupal_get_path("module", "sbhs_past_workshop") . "/js/confirm.js");
+}
 
 ?>
