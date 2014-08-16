@@ -9,7 +9,7 @@ function sbhs_past_workshop_menu() {
     );
     $items["workshops/add"] = array(
         "title" => "Add Past Workshops",
-        "page callback" => "sbhs_past_workshop_add_all",
+        "page callback" => "sbhs_past_workshop_display_all",
         "access arguments" => array("manage past workshop"),
         "type" => MENU_CALLBACK
     );
