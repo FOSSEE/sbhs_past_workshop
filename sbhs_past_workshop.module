@@ -5,37 +5,37 @@ function sbhs_past_workshop_menu() {
         "title" => "Past Workshops",
         "page callback" => "sbhs_past_workshop_view_all",
         "access arguments" => array("view past workshop"),
-        "type" => MENU_CALLBACK
+        // "type" => MENU_CALLBACK
     );
     $items["workshops/add"] = array(
         "title" => "Add Past Workshops",
         "page callback" => "sbhs_past_workshop_display_all",
         "access arguments" => array("manage past workshop"),
-        "type" => MENU_CALLBACK
+        // "type" => MENU_CALLBACK
     );
     $items["workshops/edit"] = array(
         "title" => "Edit Past Workshops",
         "page callback" => "sbhs_past_workshop_edit_all",
         "access arguments" => array("manage past workshop"),
-        "type" => MENU_CALLBACK
+        // "type" => MENU_CALLBACK
     );
     $items["workshops/delete"] = array(
         "title" => "Delete Past Workshops",
         "page callback" => "sbhs_past_workshop_delete_all",
         "access arguments" => array("manage past workshop"),
-        "type" => MENU_CALLBACK
+        // "type" => MENU_CALLBACK
     );
     $items["workshops/view_details"] = array(
         "title" => "Past Workshops Details",
         "page callback" => "sbhs_past_workshop_view_details_all",
         "access arguments" => array("view past workshop"),
-        "type" => MENU_CALLBACK
+        // "type" => MENU_CALLBACK
     );
     $items["workshops/upcoming"] = array(
         "title" => "View Upcoming Workshops",
         "page callback" => "sbhs_past_workshop_view_upcoming_all",
         "access arguments" => array("view upcoming workshop"),
-        "type" => MENU_CALLBACK
+        // "type" => MENU_CALLBACK
     );
 
     return $items;
@@ -53,7 +53,7 @@ function sbhs_past_workshop_add_form($form_state, $workshop_id=0) {
         SELECT * FROM sbhs_workshop
         WHERE w_id = {$workshop_id}
         ";
-    $result = db_query($query);
+    $result = \Drupal::database()->query($query);
     $row = db_fetch_object($result);
 
     $form = array();
@@ -131,14 +131,14 @@ function sbhs_past_workshop_add_form($form_state, $workshop_id=0) {
 }
 
 
-function sbhs_past_workshop_add_form_validate($form,&$form_state) {
-    // for future use
-}
+// function sbhs_past_workshop_add_form_validate($form,&$form_state) {
+//     // for future use
+// }
 
 function sbhs_past_workshop_display_all() 
 {
     $page_content = "";
-    $page_content .= drupal_get_form("sbhs_past_workshop_add_form");
+    $page_content .= \Drupal::formBuilder()->getForm("sbhs_past_workshop_add_form");
     return $page_content;
 
 }
@@ -153,7 +153,7 @@ function sbhs_past_workshop_add_form_submit($form, &$form_state) {
             state = '%s',pincode = %d,no_of_students = %d,body = '%s'
             WHERE w_id = %d
             ";
-        $result = db_query($query, 
+        $result = \Drupal::database()->query($query, 
             $v["organiser"], $v["date"], $v["time"],
             $v["institute"], $v["street"], $v["city"],
             $v["state"], $v["pincode"], $v["no_of_students"],$v["body"],$v["workshop_id"]
@@ -166,16 +166,16 @@ function sbhs_past_workshop_add_form_submit($form, &$form_state) {
             VALUES
             ('%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, %d, '%s')
             ";
-        $result = db_query($query, 
+        $result = \Drupal::database()->query($query, 
             $v["organiser"], $v["date"], $v["time"],
             $v["institute"], $v["street"], $v["city"],
             $v["state"], $v["pincode"], $v["no_of_students"],$v["body"]
         );
     }
     if(!$result) {
-        drupal_set_message("Something went wrong, please try again.", "error");
+        \Drupal::messenger()->addMessage("Something went wrong, please try again.", "error");
     } else {
-        drupal_set_message("Workshop added successfully","status");
+        \Drupal::messenger()->addMessage("Workshop added successfully","status");
     }
 }
 
@@ -185,11 +185,11 @@ function sbhs_past_workshop_delete_all($workshop_id=0) {
     $page_content = "";
     $query = "DELETE from sbhs_workshop 
         WHERE w_id = {$workshop_id}";
-    $result = db_query($query,$workshop_id);
+    $result = \Drupal::database()->query($query,$workshop_id);
     if(!$result) {
-        drupal_set_message("Something went wrong, please try again.", "error");
+        \Drupal::messenger()->addMessage("Something went wrong, please try again.", "error");
     } else {
-        drupal_set_message("Workshop Deleted successfully","status");
+        \Drupal::messenger()->addMessage("Workshop Deleted successfully","status");
     }
     return $page_content;
 }
@@ -198,30 +198,42 @@ function sbhs_past_workshop_delete_all($workshop_id=0) {
 function sbhs_past_workshop_edit_all($workshop_id=0) {
     $page_content = "";
     if($workshop_id) {
-        $page_content .= drupal_get_form("sbhs_past_workshop_add_form", $workshop_id);
+        $page_content .= \Drupal::formBuilder()->getForm("sbhs_past_workshop_add_form", $workshop_id);
     } else {
         $query = "
             SELECT * FROM sbhs_workshop 
             ORDER BY date desc";
-        $result = db_query($query);
+        $result = \Drupal::database()->query($query);
         $headers = array(
             "Date","Institute", "City","No of Students","Action"
         );
         $rows = array();
         $options = array('attributes' => array('class' => 'delete'));
         while($row = db_fetch_object($result)) {
-            $item = array(
-                $row->date,
-                $row->institute,		   
-                $row->city,
-                $row->no_of_students,
-                l("Edit", "workshops/edit/{$row->w_id}") ." | ".
-                l("Delete","workshops/delete/{$row->w_id}",$options)
+            // @FIXME
+// l() expects a Url object, created from a route name or external URI.
+// $item = array(
+//                 $row->date,
+//                 $row->institute,
+//                 $row->city,
+//                 $row->no_of_students,
+//                 l("Edit", "workshops/edit/{$row->w_id}") ." | ".
+//                 l("Delete","workshops/delete/{$row->w_id}",$options)
+// 
+//             );
 
-            );
             array_push($rows, $item);
         }
-        $page_content .= theme("table", $headers, $rows);
+        // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// $page_content .= theme("table", $headers, $rows);
+
     }
     return $page_content;
 }
@@ -232,24 +244,36 @@ function sbhs_past_workshop_view_all($workshop_id=0) {
     $query = "
         SELECT * FROM sbhs_workshop 
         ORDER BY date desc";
-    $result = db_query($query);
+    $result = \Drupal::database()->query($query);
     $headers = array(
         "Date","Institute", "City","No of Students","Action"
     );
     $rows = array();
     $options = array('attributes' => array('class' => 'delete'));
     while($row = db_fetch_object($result)) {
-        $item = array(
-            $row->date,
-            $row->institute,		   
-            $row->city,
-            $row->no_of_students,
-            l("view", "workshops/view_details/{$row->w_id}")
+        // @FIXME
+// l() expects a Url object, created from a route name or external URI.
+// $item = array(
+//             $row->date,
+//             $row->institute,
+//             $row->city,
+//             $row->no_of_students,
+//             l("view", "workshops/view_details/{$row->w_id}")
+// 
+//         );
 
-        );
         array_push($rows, $item);
     }
-    $page_content .= theme("table", $headers, $rows);
+    // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// $page_content .= theme("table", $headers, $rows);
+
 
     return $page_content;
 }
@@ -259,7 +283,7 @@ function sbhs_past_workshop_view_details_all($workshop_id=0) {
     $query = "
         SELECT * FROM sbhs_workshop 
         ORDER BY date desc";
-    $result = db_query($query);
+    $result = \Drupal::database()->query($query);
     $row=db_fetch_object($result);	
     $page_content .="<table class='workshop-details'>";
     $page_content .="<tr><td><b>Institute</b></td><td>{$row->institute}</td></tr>";
@@ -286,9 +310,9 @@ function sbhs_past_workshop_view_upcoming_all() {
 
 }
 
-function sbhs_past_workshop_init() {
-    drupal_add_css(drupal_get_path("module", "sbhs_past_workshop") . "/css/sbhs_past_workshop.css");
-    drupal_add_js(drupal_get_path("module", "sbhs_past_workshop") . "/js/confirm.js");
-}
+// function sbhs_past_workshop_init() {
+//     drupal_add_css(drupal_get_path("module", "sbhs_past_workshop") . "/css/sbhs_past_workshop.css");
+//     drupal_add_js(drupal_get_path("module", "sbhs_past_workshop") . "/js/confirm.js");
+// }
 
 ?>

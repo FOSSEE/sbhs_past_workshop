@@ -1,0 +1,23 @@
+sbhs_past_workshop.view_all:
+  route_name: sbhs_past_workshop.view_all
+  title: 'Past Workshops'
+sbhs_past_workshop.display_all:
+  route_name: sbhs_past_workshop.display_all
+  title: 'Add Past Workshops'
+  parent: sbhs_past_workshop.view_all
+sbhs_past_workshop.edit_all:
+  route_name: sbhs_past_workshop.edit_all
+  title: 'Edit Past Workshops'
+  parent: sbhs_past_workshop.view_all
+sbhs_past_workshop.delete_all:
+  route_name: sbhs_past_workshop.delete_all
+  title: 'Delete Past Workshops'
+  parent: sbhs_past_workshop.view_all
+sbhs_past_workshop.view_details_all:
+  route_name: sbhs_past_workshop.view_details_all
+  title: 'Past Workshops Details'
+  parent: sbhs_past_workshop.view_all
+sbhs_past_workshop.view_upcoming_all:
+  route_name: sbhs_past_workshop.view_upcoming_all
+  title: 'View Upcoming Workshops'
+  parent: sbhs_past_workshop.view_all
