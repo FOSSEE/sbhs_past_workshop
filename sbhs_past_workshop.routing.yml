@@ -1,0 +1,42 @@
+sbhs_past_workshop.view_all:
+  path: /workshops
+  defaults:
+    _title: 'Past Workshops'
+    _controller: '\Drupal\sbhs_past_workshop\Controller\DefaultController::sbhs_past_workshop_view_all'
+  requirements:
+    _permission: 'view past workshop'
+sbhs_past_workshop.display_all:
+  path: /workshops/add
+  defaults:
+    _title: 'Add Past Workshops'
+    _controller: '\Drupal\sbhs_past_workshop\Controller\DefaultController::sbhs_past_workshop_display_all'
+  requirements:
+    _permission: 'manage past workshop'
+sbhs_past_workshop.edit_all:
+  path: /workshops/edit
+  defaults:
+    _title: 'Edit Past Workshops'
+    _controller: '\Drupal\sbhs_past_workshop\Controller\DefaultController::sbhs_past_workshop_edit_all'
+  requirements:
+    _permission: 'manage past workshop'
+sbhs_past_workshop.delete_all:
+  path: /workshops/delete
+  defaults:
+    _title: 'Delete Past Workshops'
+    _controller: '\Drupal\sbhs_past_workshop\Controller\DefaultController::sbhs_past_workshop_delete_all'
+  requirements:
+    _permission: 'manage past workshop'
+sbhs_past_workshop.view_details_all:
+  path: /workshops/view_details/{workshop_id}
+  defaults:
+    _title: 'Past Workshops Details'
+    _controller: '\Drupal\sbhs_past_workshop\Controller\DefaultController::sbhs_past_workshop_view_details_all'
+  requirements:
+    _permission: 'view past workshop'
+sbhs_past_workshop.view_upcoming_all:
+  path: /workshops/upcoming
+  defaults:
+    _title: 'View Upcoming Workshops'
+    _controller: '\Drupal\sbhs_past_workshop\Controller\DefaultController::sbhs_past_workshop_view_upcoming_all'
+  requirements:
+    _permission: 'view upcoming workshop'

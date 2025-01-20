@@ -1,0 +1,6 @@
+name: sbhs_past_workshop
+description: 'To manage and display testimonials'
+type: module
+package: FOSSEE
+core_version_requirement: ^8 || ^9 ||^10
+dependencies: {  }
